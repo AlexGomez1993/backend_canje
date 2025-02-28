@@ -10,8 +10,8 @@ import ciudadRouter from "./routes/ciudadRoutes.js";
 import noticiaRouter from "./routes/noticiaRoutes.js";
 import formaPagoRouter from "./routes/formasPagoRoutes.js";
 import usuarioRouter from "./routes/usuarioRoutes.js";
-//const authRoutes = require('./src/routes/authRoutes');
-//const userRoutes = require('./src/routes/userRoutes');
+import autenticarJWT from "./middleware/auth.js";
+import authRouter from "./routes/authRoutes.js";
 
 
 const app = express();
@@ -34,12 +34,13 @@ app.use(
     })
 );
 
-app.use("/api/tiendas", tiendasRouter);
-app.use("/api/provincias", provinciaRouter);
-app.use("/api/ciudades", ciudadRouter);
-app.use("/api/noticias", noticiaRouter);
-app.use("/api/formasPago", formaPagoRouter);
-app.use("/api/usuarios", usuarioRouter);
+app.use("/api/auth",autenticarJWT, authRouter); 
+app.use("/api/tiendas",autenticarJWT, tiendasRouter);
+app.use("/api/provincias",autenticarJWT, provinciaRouter);
+app.use("/api/ciudades",autenticarJWT, ciudadRouter);
+app.use("/api/noticias",autenticarJWT, noticiaRouter);
+app.use("/api/formasPago",autenticarJWT, formaPagoRouter);
+app.use("/api/usuarios",autenticarJWT, usuarioRouter);
 
 
 const PORT = process.env.BD_PORT || 3000;

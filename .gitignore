@@ -13,3 +13,5 @@ Thumbs.db
 # Archivos de compilación
 /dist/
 /build/
+
+.env

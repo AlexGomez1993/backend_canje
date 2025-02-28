@@ -29,6 +29,20 @@ Promocion.belongsToMany(Campania, {
     timestamps: false,
 });
 
+Campania.belongsToMany(Tienda, {
+    through: "campania_tienda",
+    foreignKey: "campania_id",
+    otherKey: "tienda_id",
+    timestamps: false,
+});
+
+Tienda.belongsToMany(Campania, {
+    through: "campania_tienda",
+    foreignKey: "tienda_id",
+    otherKey: "campania_id",
+    timestamps: false,
+});
+
 Ciudad.belongsTo(Provincia, {
     foreignKey: "provincia_id",
     as: "provincia",

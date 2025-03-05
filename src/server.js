@@ -12,6 +12,8 @@ import formaPagoRouter from "./routes/formasPagoRoutes.js";
 import usuarioRouter from "./routes/usuarioRoutes.js";
 import autenticarJWT from "./middleware/auth.js";
 import authRouter from "./routes/authRoutes.js";
+import campaniaRouter from "./routes/campaniaRoutes.js";
+import promocionRouter from "./routes/promocionRouter.js";
 
 
 const app = express();
@@ -34,13 +36,15 @@ app.use(
     })
 );
 
-app.use("/api/auth",autenticarJWT, authRouter); 
+app.use("/api/auth", authRouter); 
 app.use("/api/tiendas",autenticarJWT, tiendasRouter);
 app.use("/api/provincias",autenticarJWT, provinciaRouter);
 app.use("/api/ciudades",autenticarJWT, ciudadRouter);
 app.use("/api/noticias",autenticarJWT, noticiaRouter);
 app.use("/api/formasPago",autenticarJWT, formaPagoRouter);
 app.use("/api/usuarios",autenticarJWT, usuarioRouter);
+app.use("/api/campanias",autenticarJWT, campaniaRouter);
+app.use("/api/promociones",autenticarJWT, promocionRouter);
 
 
 const PORT = process.env.BD_PORT || 3000;

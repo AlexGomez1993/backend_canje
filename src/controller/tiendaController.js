@@ -3,7 +3,6 @@ import { Tienda } from "../models/index.js";
 const listarTiendas = async (req, res) => {
     try {
         const tiendas = await Tienda.findAll({
-            where: { activo: 1 },
             order: [["nombre", "ASC"]],
         });
         console.log(tiendas);
@@ -18,4 +17,38 @@ const listarTiendas = async (req, res) => {
     }
 };
 
-export { listarTiendas };
+const activarTienda = async (req, res) => {
+    try {
+        
+        const { idTienda } = req.body;
+
+        if (!idTienda) {
+            const error = new Error("El id de la tienda es necesario");
+            return res.status(400).json({ msg: error.message });
+        }
+
+        const tienda = await Tienda.findOne({
+            where: { id: idTienda },
+        });
+
+        if (!tienda) {
+            const error = new Error("tienda no encontrada");
+            return res.status(404).json({ msg: error.message });
+        }
+
+        console.log('tienda.activo', tienda.activo)
+        tienda.activo = !tienda.activo ? true : false;
+
+        await tienda.save();
+
+        return res.status(200).json({
+            msg: `tienda actualizada correctamente`,
+            tienda: tienda.nombre,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error al activar la tienda" });
+    }
+};
+
+export { listarTiendas, activarTienda };

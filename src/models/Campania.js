@@ -22,7 +22,7 @@ const Campania = db.define(
         },
         slug: {
             type: DataTypes.STRING(100),
-            allowNull: false,
+            allowNull: true,
         },
     },
     {

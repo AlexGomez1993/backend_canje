@@ -51,4 +51,27 @@ const activarCampania = async (req, res) => {
     }
 };
 
-export { listarCampania, activarCampania };
+const crearCampania = async (req, res) => {
+    try {
+        const { nombre, descripcion, logo } = req.body;
+
+        const campania = await Campania.create({
+            nombre,
+            descripcion,            
+            logo,
+        });
+
+        console.log("campania.activo", campania.id);
+
+        return res.status(200).json({
+            msg: `campaña creada correctamente`,
+            campania: campania.nombre,
+            id: campania.id
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error al crear la campaña" });
+    }
+};
+
+export { listarCampania, activarCampania, crearCampania };

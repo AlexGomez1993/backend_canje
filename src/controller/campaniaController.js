@@ -5,7 +5,7 @@ const listarCampania = async (req, res) => {
         const campanias = await Campania.findAll({
             order: [["id", "DESC"]],
         });
-        
+
         if (campanias.length === 0) {
             const error = new Error("No tienes campañas registradas");
             return res.status(404).json({ msg: error.message });
@@ -84,11 +84,9 @@ const agregarTiendas = async (req, res) => {
         });
 
         if (tiendas.length !== tiendasIds.length) {
-            return res
-                .status(400)
-                .json({
-                    error: "Algunas tiendas no existen en la base de datos",
-                });
+            return res.status(400).json({
+                error: "Algunas tiendas no existen en la base de datos",
+            });
         }
         await campania.addTiendas(tiendasIds);
 
@@ -119,11 +117,9 @@ const agregarPromociones = async (req, res) => {
         });
 
         if (promociones.length !== promocionesIds.length) {
-            return res
-                .status(400)
-                .json({
-                    error: "Algunas promociones no existen en la base de datos",
-                });
+            return res.status(400).json({
+                error: "Algunas promociones no existen en la base de datos",
+            });
         }
 
         await campania.addPromocion(promocionesIds);
@@ -141,10 +137,61 @@ const agregarPromociones = async (req, res) => {
     }
 };
 
+const editarCampania = async (req, res) => {
+    try {
+        const { idCampania } = req.params;
+        const { nombre, descripcion, activo, logo } = req.body;
+
+        const campania = await Campania.findByPk(idCampania);
+        if (!campania) {
+            return res.status(404).json({ msg: "Campaña no encontrada" });
+        }
+
+        campania.nombre = nombre || campania.nombre;
+        campania.descripcion = descripcion || campania.descripcion;
+        campania.logo = logo || campania.logo;
+        campania.activo = activo !== undefined ? activo : campania.activo;
+
+        await campania.save();
+
+        return res.status(200).json({
+            msg: `Campaña actualizada correctamente`,
+            campania: campania.nombre,
+            id: campania.id,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error al actualizar la campaña" });
+    }
+};
+
+const obtenerCampania = async (req, res) => {
+    try {
+        const { idCampania } = req.params;
+
+        const campania = await Campania.findByPk(idCampania, {
+            include: [Tienda, Promocion],
+        });
+
+        if (!campania) {
+            return res.status(404).json({ msg: "Campaña no encontrada" });
+        }
+
+        return res.status(200).json({
+            campania,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error al obtener la campaña" });
+    }
+};
+
 export {
     listarCampania,
     activarCampania,
     crearCampania,
     agregarTiendas,
     agregarPromociones,
+    editarCampania,
+    obtenerCampania,
 };

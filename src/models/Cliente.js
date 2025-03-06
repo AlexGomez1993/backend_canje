@@ -47,6 +47,7 @@ const Cliente = db.define(
         activo: {
             type: DataTypes.BOOLEAN,
             allowNull: true,
+            defaultValue: 1,
         },
         saldo: {
             type: DataTypes.DECIMAL(10, 2),

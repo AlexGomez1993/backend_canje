@@ -25,6 +25,7 @@ const Tienda = db.define(
         },
         activo: {
             type: DataTypes.BOOLEAN,
+            allowNull: true,
             defaultValue: 1,
         },
     },

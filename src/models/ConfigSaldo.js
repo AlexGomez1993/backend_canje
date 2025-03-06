@@ -25,8 +25,9 @@ const ConfigSaldo = db.define(
             allowNull: false,
         },
         activo: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
+            type: DataTypes.BOOLEAN,
+            allowNull: true,
+            defaultValue: 1,
         },
     },
     {

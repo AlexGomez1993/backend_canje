@@ -15,6 +15,7 @@ const Campania = db.define(
         activo: {
             type: DataTypes.BOOLEAN,
             allowNull: true,
+            defaultValue: 1,
         },
         logo: {
             type: DataTypes.STRING(255),

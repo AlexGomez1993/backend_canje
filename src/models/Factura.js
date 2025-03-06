@@ -25,8 +25,9 @@ const Factura = db.define(
             allowNull: true,
         },
         activo: {
-            type: DataTypes.TINYINT(1),
+            type: DataTypes.BOOLEAN,
             allowNull: true,
+            defaultValue: 1,
         },
         formapago_id: {
             type: DataTypes.INTEGER,

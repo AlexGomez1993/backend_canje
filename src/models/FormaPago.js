@@ -21,8 +21,9 @@ const Formapago = db.define(
             allowNull: false,
         },
         activo: {
-            type: DataTypes.TINYINT(1),
+            type: DataTypes.BOOLEAN,
             allowNull: true,
+            defaultValue: 1,
         },
     },
     {

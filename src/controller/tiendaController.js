@@ -19,7 +19,6 @@ const listarTiendas = async (req, res) => {
 
 const activarTienda = async (req, res) => {
     try {
-        
         const { idTienda } = req.body;
 
         if (!idTienda) {
@@ -36,7 +35,7 @@ const activarTienda = async (req, res) => {
             return res.status(404).json({ msg: error.message });
         }
 
-        console.log('tienda.activo', tienda.activo)
+        console.log("tienda.activo", tienda.activo);
         tienda.activo = !tienda.activo ? true : false;
 
         await tienda.save();
@@ -51,4 +50,26 @@ const activarTienda = async (req, res) => {
     }
 };
 
-export { listarTiendas, activarTienda };
+const crearTienda = async (req, res) => {
+    try {
+        const { nombre, descripcion, numcupones } = req.body;
+
+        const tienda = await Tienda.create({
+            nombre,
+            descripcion,
+            numcupones,
+        });
+
+        console.log("tienda.activo", tienda.id);
+
+        return res.status(200).json({
+            msg: `tienda creada correctamente`,
+            tienda: tienda.nombre,
+            id: tienda.id
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error al crear la tienda" });
+    }
+};
+export { listarTiendas, activarTienda, crearTienda };

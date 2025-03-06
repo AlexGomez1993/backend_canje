@@ -5,7 +5,7 @@ const listarPromocion = async (req, res) => {
         const promociones = await Promocion.findAll({
             order: [["id", "DESC"]],
         });
-        console.log(promociones);
+
         if (promociones.length === 0) {
             const error = new Error("No tienes promociones registradas");
             return res.status(404).json({ msg: error.message });
@@ -35,7 +35,6 @@ const activarPromocion = async (req, res) => {
             return res.status(404).json({ msg: error.message });
         }
 
-        console.log("promocion.activo", promocion.activo);
         promocion.activo = !promocion.activo ? true : false;
 
         await promocion.save();
@@ -62,8 +61,6 @@ const crearPromocion = async (req, res) => {
             fecha_inicio,
             fecha_fin,
         });
-
-        console.log("promocion.activo", promocion.id);
 
         return res.status(200).json({
             msg: `promocion creada correctamente`,

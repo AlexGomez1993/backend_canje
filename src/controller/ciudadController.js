@@ -11,7 +11,7 @@ const listarCiudades = async (req, res) => {
                 },
             ],
         });
-        console.log(ciudades);
+
         if (ciudades.length === 0) {
             const error = new Error("No tienes ciudades registradas");
             return res.status(404).json({ msg: error.message });

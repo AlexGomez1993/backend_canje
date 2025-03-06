@@ -12,7 +12,7 @@ const listarUsuarios = async (req, res) => {
             ],
             attributes: { exclude: ['password', 'salt'] }
         });
-        console.log(usuarios);
+
         if (usuarios.length === 0) {
             const error = new Error("No tienes usuarios registrados");
             return res.status(404).json({ msg: error.message });

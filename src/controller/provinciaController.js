@@ -5,7 +5,7 @@ const listarProvincias = async (req, res) => {
         const provincias = await Provincia.findAll({
             order: [["nombre", "ASC"]],
         });
-        console.log(provincias);
+
         if (provincias.length === 0) {
             const error = new Error("No tienes provincias registradas");
             return res.status(404).json({ msg: error.message });

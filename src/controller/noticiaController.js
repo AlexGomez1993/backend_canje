@@ -5,7 +5,7 @@ const listarNoticias = async (req, res) => {
         const noticias = await Noticia.findAll({
             where: { activo: 1 },
         });
-        console.log(noticias);
+
         if (noticias.length === 0) {
             const error = new Error("No tienes noticias registradas");
             return res.status(404).json({ msg: error.message });

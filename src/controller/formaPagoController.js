@@ -3,7 +3,7 @@ import { Formapago } from "../models/index.js";
 const listarFormaPago = async (req, res) => {
     try {
         const formasPago = await Formapago.findAll({});
-        console.log(formasPago);
+
         if (formasPago.length === 0) {
             const error = new Error("No tienes formasPago registradas");
             return res.status(404).json({ msg: error.message });

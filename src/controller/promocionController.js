@@ -51,4 +51,29 @@ const activarPromocion = async (req, res) => {
     }
 };
 
-export { listarPromocion, activarPromocion };
+const crearPromocion = async (req, res) => {
+    try {
+        const { nombre, descripcion, montominimo,fecha_inicio, fecha_fin } = req.body;
+
+        const promocion = await Promocion.create({
+            nombre,
+            descripcion,            
+            montominimo,
+            fecha_inicio,
+            fecha_fin
+        });
+
+        console.log("promocion.activo", promocion.id);
+
+        return res.status(200).json({
+            msg: `promocion creada correctamente`,
+            promocion: promocion.nombre,
+            id: promocion.id
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error al crear la promocion" });
+    }
+};
+
+export { listarPromocion, activarPromocion, crearPromocion };

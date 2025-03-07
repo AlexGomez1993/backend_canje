@@ -20,6 +20,7 @@ Campania.belongsToMany(Promocion, {
     foreignKey: "campania_id",
     otherKey: "promocion_id",
     timestamps: false,
+    as: "Promociones"
 });
 
 Promocion.belongsToMany(Campania, {
@@ -27,6 +28,7 @@ Promocion.belongsToMany(Campania, {
     foreignKey: "promocion_id",
     otherKey: "campania_id",
     timestamps: false,
+    as: "Campanias"
 });
 
 Campania.belongsToMany(Tienda, {

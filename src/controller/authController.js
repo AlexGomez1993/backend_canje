@@ -27,6 +27,7 @@ const login = async (req, res) => {
             token,
             loginStatus: "success",
             message: "Login exitoso",
+            user: {"id": user.id, "rol": user.rol_id}
         });
     } catch (error) {
         console.error(error);

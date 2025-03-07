@@ -72,67 +72,114 @@ const crearCampania = async (req, res) => {
 
 const agregarTiendas = async (req, res) => {
     try {
-        const { campaniaId, tiendasIds } = req.body;
+        const { campaniaId, tiendasIds, eliminarTiendasIds } = req.body;
 
         const campania = await Campania.findByPk(campaniaId);
         if (!campania) {
-            throw new Error("Campaña no encontrada");
+            return res.status(404).json({ error: "Campaña no encontrada" });
+        }
+        if (tiendasIds && tiendasIds.length > 0) {
+            const tiendasExistentes = await campania.getTiendas();
+            const tiendasExistentesIds = tiendasExistentes.map((t) => t.id);
+
+            const nuevasTiendasIds = tiendasIds.filter(
+                (id) => !tiendasExistentesIds.includes(id)
+            );
+
+            if (nuevasTiendasIds.length > 0) {
+                const nuevasTiendas = await Tienda.findAll({
+                    where: { id: nuevasTiendasIds },
+                });
+
+                if (nuevasTiendas.length !== nuevasTiendasIds.length) {
+                    return res.status(400).json({
+                        error: "Algunas tiendas a agregar no existen en la base de datos",
+                    });
+                }
+
+                await campania.addTiendas(nuevasTiendas);
+            }
         }
 
-        const tiendas = await Tienda.findAll({
-            where: { id: tiendasIds },
-        });
-
-        if (tiendas.length !== tiendasIds.length) {
-            return res.status(400).json({
-                error: "Algunas tiendas no existen en la base de datos",
+        if (eliminarTiendasIds && eliminarTiendasIds.length > 0) {
+            const tiendasAEliminar = await Tienda.findAll({
+                where: { id: eliminarTiendasIds },
             });
+
+            if (tiendasAEliminar.length > 0) {
+                await campania.removeTiendas(tiendasAEliminar);
+            }
         }
-        await campania.addTiendas(tiendasIds);
 
         return res.status(200).json({
-            msg: `tiendas agregadas a la campaña ${campania.nombre} correctamente`,
+            msg: `Tiendas actualizadas en la campaña ${campania.nombre} correctamente`,
             campania: campania.nombre,
             id: campania.id,
         });
     } catch (error) {
         console.error(error);
         res.status(500).json({
-            error: "Error al agregar las tiendas a la campaña",
+            error: "Error al actualizar las tiendas en la campaña",
         });
     }
 };
 
 const agregarPromociones = async (req, res) => {
     try {
-        const { campaniaId, promocionesIds } = req.body;
+        const { campaniaId, promocionesIds, eliminarPromocionesIds } = req.body;
 
-        const campania = await Campania.findByPk(campaniaId);
+        const campania = await Campania.findByPk(campaniaId, {
+            include: { model: Promocion, as: "Promociones" },
+        });
         if (!campania) {
             return res.status(404).json({ error: "Campaña no encontrada" });
         }
 
-        const promociones = await Promocion.findAll({
-            where: { id: promocionesIds },
-        });
+        if (promocionesIds && promocionesIds.length > 0) {
+            const promocionesExistentes = await campania.getPromociones();
 
-        if (promociones.length !== promocionesIds.length) {
-            return res.status(400).json({
-                error: "Algunas promociones no existen en la base de datos",
-            });
+            const promocionesExistentesIds = promocionesExistentes.map(
+                (t) => t.id
+            );
+
+            const nuevasPromocionesIds = promocionesIds.filter(
+                (id) => !promocionesExistentesIds.includes(id)
+            );
+
+            if (nuevasPromocionesIds.length > 0) {
+                const nuevasPromociones = await Promocion.findAll({
+                    where: { id: nuevasPromocionesIds },
+                });
+
+                if (nuevasPromociones.length !== nuevasPromocionesIds.length) {
+                    return res.status(400).json({
+                        error: "Algunas promociones a agregar no existen en la base de datos",
+                    });
+                }
+
+                await campania.addPromociones(nuevasPromociones);
+            }
         }
 
-        await campania.addPromocion(promocionesIds);
+        if (eliminarPromocionesIds && eliminarPromocionesIds.length > 0) {
+            const promocionesAEliminar = await Promocion.findAll({
+                where: { id: eliminarPromocionesIds },
+            });
+
+            if (promocionesAEliminar.length > 0) {
+                await campania.removePromociones(promocionesAEliminar);
+            }
+        }
 
         return res.status(200).json({
-            msg: `promociones agregadas a la campaña ${campania.nombre} correctamente`,
+            msg: `Promociones actualizadas en la campaña ${campania.nombre} correctamente`,
             campania: campania.nombre,
             id: campania.id,
         });
     } catch (error) {
         console.error(error);
         res.status(500).json({
-            error: "Error al agregar las promociones a la campaña",
+            error: "Error al actualizar las promociones en la campaña",
         });
     }
 };

@@ -10,7 +10,7 @@ const Formapago = db.define(
         },
         slug: {
             type: DataTypes.STRING(255),
-            allowNull: false,
+            allowNull: true,
         },
         descripcion: {
             type: DataTypes.TEXT,

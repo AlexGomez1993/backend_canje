@@ -14,6 +14,7 @@ import autenticarJWT from "./middleware/auth.js";
 import authRouter from "./routes/authRoutes.js";
 import campaniaRouter from "./routes/campaniaRoutes.js";
 import promocionRouter from "./routes/promocionRouter.js";
+import variableRouter from "./routes/variableRoutes.js";
 
 
 const app = express();
@@ -45,7 +46,7 @@ app.use("/api/formasPago",autenticarJWT, formaPagoRouter);
 app.use("/api/usuarios",autenticarJWT, usuarioRouter);
 app.use("/api/campanias",autenticarJWT, campaniaRouter);
 app.use("/api/promociones",autenticarJWT, promocionRouter);
-
+app.use("/api/variables", autenticarJWT, variableRouter)
 
 const PORT = process.env.BD_PORT || 3000;
 app.listen(PORT, () => {

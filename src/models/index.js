@@ -20,7 +20,7 @@ Campania.belongsToMany(Promocion, {
     foreignKey: "campania_id",
     otherKey: "promocion_id",
     timestamps: false,
-    as: "Promociones"
+    as: "Promociones",
 });
 
 Promocion.belongsToMany(Campania, {
@@ -28,7 +28,7 @@ Promocion.belongsToMany(Campania, {
     foreignKey: "promocion_id",
     otherKey: "campania_id",
     timestamps: false,
-    as: "Campanias"
+    as: "Campanias",
 });
 
 Campania.belongsToMany(Tienda, {
@@ -78,6 +78,7 @@ ConfigSaldo.belongsTo(Campania, {
     foreignKey: "campania_id",
     onDelete: "SET NULL",
     onUpdate: "SET NULL",
+    as: "Campanias",
 });
 Cupon.belongsTo(Cliente, {
     foreignKey: "cliente_id",

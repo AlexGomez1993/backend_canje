@@ -15,10 +15,10 @@ import authRouter from "./routes/authRoutes.js";
 import campaniaRouter from "./routes/campaniaRoutes.js";
 import promocionRouter from "./routes/promocionRouter.js";
 import variableRouter from "./routes/variableRoutes.js";
-
+import configSaldoRouter from "./routes/configSaldo.js";
 
 const app = express();
-//para poder enviar respuestas tipo json
+
 app.use(express.json());
 app.use(express.static("./public"));
 
@@ -37,19 +37,19 @@ app.use(
     })
 );
 
-app.use("/api/auth", authRouter); 
-app.use("/api/tiendas",autenticarJWT, tiendasRouter);
-app.use("/api/provincias",autenticarJWT, provinciaRouter);
-app.use("/api/ciudades",autenticarJWT, ciudadRouter);
-app.use("/api/noticias",autenticarJWT, noticiaRouter);
-app.use("/api/formasPago",autenticarJWT, formaPagoRouter);
-app.use("/api/usuarios",autenticarJWT, usuarioRouter);
-app.use("/api/campanias",autenticarJWT, campaniaRouter);
-app.use("/api/promociones",autenticarJWT, promocionRouter);
-app.use("/api/variables", autenticarJWT, variableRouter)
+app.use("/api/auth", authRouter);
+app.use("/api/tiendas", autenticarJWT, tiendasRouter);
+app.use("/api/provincias", autenticarJWT, provinciaRouter);
+app.use("/api/ciudades", autenticarJWT, ciudadRouter);
+app.use("/api/noticias", autenticarJWT, noticiaRouter);
+app.use("/api/formasPago", autenticarJWT, formaPagoRouter);
+app.use("/api/usuarios", autenticarJWT, usuarioRouter);
+app.use("/api/campanias", autenticarJWT, campaniaRouter);
+app.use("/api/promociones", autenticarJWT, promocionRouter);
+app.use("/api/variables", autenticarJWT, variableRouter);
+app.use("/api/configSaldos", autenticarJWT, configSaldoRouter);
 
 const PORT = process.env.BD_PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`);
 });
-

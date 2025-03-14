@@ -54,12 +54,14 @@ Cliente.belongsTo(Provincia, {
     foreignKey: "provincia_id",
     onDelete: "SET NULL",
     onUpdate: "CASCADE",
+    as: "provincia",
 });
 
 Cliente.belongsTo(Ciudad, {
     foreignKey: "ciudad_id",
     onDelete: "SET NULL",
     onUpdate: "CASCADE",
+    as: "ciudad",
 });
 
 Cliente.hasMany(Factura, {

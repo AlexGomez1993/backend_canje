@@ -1,6 +1,6 @@
 import express from "express";
 import {
-    agregarClienteWeb,
+    crearClienteWeb,
     login,
     loginCliente,
     validarCliente,
@@ -11,6 +11,6 @@ const authRouter = express.Router();
 authRouter.post("/login", login);
 authRouter.post("/loginCliente", loginCliente);
 authRouter.get("/validarCliente", validarCliente);
-authRouter.post("/ingresarClienteWeb", agregarClienteWeb);
+authRouter.post("/ingresarClienteWeb", crearClienteWeb);
 
 export default authRouter;

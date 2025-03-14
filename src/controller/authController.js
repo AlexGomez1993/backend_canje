@@ -135,7 +135,7 @@ const loginCliente = async (req, res) => {
     }
 };
 
-const agregarClienteWeb = async (req, res) => {
+const crearClienteWeb = async (req, res) => {
     try {
         const {
             ruc,
@@ -188,8 +188,7 @@ const agregarClienteWeb = async (req, res) => {
             }
         }
         const nuevoCliente = await Cliente.create({
-            ruc: ruc || null,
-            pasaporte: pasaporte || null,
+            ruc: ruc ? ruc : pasaporte,
             nombre,
             apellidos,
             email,
@@ -217,8 +216,8 @@ const agregarClienteWeb = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al agregar el cliente" });
+        res.status(500).json({ error: "Error al crear el cliente" });
     }
 };
 
-export { login, validarCliente, loginCliente, agregarClienteWeb };
+export { login, validarCliente, loginCliente, crearClienteWeb };

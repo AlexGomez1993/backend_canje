@@ -1,16 +1,37 @@
 import { Campania, Promocion, Tienda } from "../models/index.js";
+import { getFilters } from "../helpers/filtros.js";
+import { getPagination } from "../helpers/paginacion.js";
 
 const listarCampania = async (req, res) => {
     try {
-        const campanias = await Campania.findAll({
-            order: [["id", "DESC"]],
-        });
+        const filtros = getFilters(req.query);
+        const paginacion = getPagination(req.query);
 
-        if (campanias.length === 0) {
+        let queryOptions = {
+            where: filtros,
+            order: [["id", "DESC"]],
+        };
+
+        if (paginacion.limit) {
+            queryOptions.limit = paginacion.limit;
+            queryOptions.offset = paginacion.offset;
+        }
+        const { count, rows } = await Campania.findAndCountAll(queryOptions);
+
+        if (count === 0) {
             const error = new Error("No tienes campañas registradas");
             return res.status(404).json({ msg: error.message });
         }
-        return res.status(200).json(campanias);
+
+        return res.status(200).json({
+            total: count,
+            pagina: paginacion.page,
+            limit: paginacion.limit,
+            totalPaginas: paginacion.limit
+                ? Math.ceil(count / paginacion.limit)
+                : 1,
+            data: rows,
+        });
     } catch (error) {
         console.error(error);
         res.status(404).json({ error: "Error al obtener las campañas" });

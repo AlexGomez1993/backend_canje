@@ -1,16 +1,38 @@
 import { Promocion } from "../models/index.js";
+import { getFilters } from "../helpers/filtros.js";
+import { getPagination } from "../helpers/paginacion.js";
 
 const listarPromocion = async (req, res) => {
     try {
-        const promociones = await Promocion.findAll({
-            order: [["id", "DESC"]],
-        });
+        const filtros = getFilters(req.query);
+        const paginacion = getPagination(req.query);
 
-        if (promociones.length === 0) {
+        let queryOptions = {
+            where: filtros,
+            order: [["id", "DESC"]],
+        };
+
+        if (paginacion.limit) {
+            queryOptions.limit = paginacion.limit;
+            queryOptions.offset = paginacion.offset;
+        }
+
+        const { count, rows } = await Promocion.findAndCountAll(queryOptions);
+
+        if (count === 0) {
             const error = new Error("No tienes promociones registradas");
             return res.status(404).json({ msg: error.message });
         }
-        return res.status(200).json(promociones);
+
+        return res.status(200).json({
+            total: count,
+            pagina: paginacion.page,
+            limit: paginacion.limit,
+            totalPaginas: paginacion.limit
+                ? Math.ceil(count / paginacion.limit)
+                : 1,
+            data: rows,
+        });
     } catch (error) {
         console.error(error);
         res.status(404).json({ error: "Error al obtener las promociones" });
@@ -128,5 +150,10 @@ const obtenerPromocion = async (req, res) => {
     }
 };
 
-
-export { listarPromocion, activarPromocion, crearPromocion, editarPromocion, obtenerPromocion };
+export {
+    listarPromocion,
+    activarPromocion,
+    crearPromocion,
+    editarPromocion,
+    obtenerPromocion,
+};

@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import db from "../config/db.js";
+import bcrypt from "bcryptjs";
 
 const Usuario = db.define(
     "usuario",
@@ -31,7 +32,7 @@ const Usuario = db.define(
         },
         salt: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         direccion: {
             type: DataTypes.TEXT,
@@ -60,5 +61,19 @@ const Usuario = db.define(
         timestamps: false,
     }
 );
+
+Usuario.beforeCreate(async (usuario, options) => {
+    if (usuario.password) {
+        const salt = await bcrypt.genSalt(12);
+        usuario.password = await bcrypt.hash(usuario.password, salt);
+    }
+});
+
+Usuario.beforeUpdate(async (usuario, options) => {
+    if (usuario.password) {
+        const salt = await bcrypt.genSalt(12);
+        usuario.password = await bcrypt.hash(usuario.password, salt);
+    }
+});
 
 export default Usuario;

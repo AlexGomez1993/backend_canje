@@ -16,6 +16,7 @@ import campaniaRouter from "./routes/campaniaRoutes.js";
 import promocionRouter from "./routes/promocionRouter.js";
 import variableRouter from "./routes/variableRoutes.js";
 import configSaldoRouter from "./routes/configSaldo.js";
+import clienteRouter from "./routes/clienteRoutes.js";
 
 const app = express();
 
@@ -48,6 +49,7 @@ app.use("/api/campanias", autenticarJWT, campaniaRouter);
 app.use("/api/promociones", autenticarJWT, promocionRouter);
 app.use("/api/variables", autenticarJWT, variableRouter);
 app.use("/api/configSaldos", autenticarJWT, configSaldoRouter);
+app.use("/api/clientes", autenticarJWT, clienteRouter);
 
 const PORT = process.env.BD_PORT || 3000;
 app.listen(PORT, () => {

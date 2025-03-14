@@ -17,6 +17,7 @@ import promocionRouter from "./routes/promocionRouter.js";
 import variableRouter from "./routes/variableRoutes.js";
 import configSaldoRouter from "./routes/configSaldo.js";
 import clienteRouter from "./routes/clienteRoutes.js";
+import validarRouter from "./routes/validarRoutes.js";
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use(
 );
 
 app.use("/api/auth", authRouter);
+app.use("/api/validacion", validarRouter);
 app.use("/api/tiendas", autenticarJWT, tiendasRouter);
 app.use("/api/provincias", autenticarJWT, provinciaRouter);
 app.use("/api/ciudades", autenticarJWT, ciudadRouter);

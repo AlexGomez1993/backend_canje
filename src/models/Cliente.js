@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import db from "../config/db.js";
+import bcrypt from "bcryptjs";
 
 const Cliente = db.define(
     "cliente",
@@ -55,7 +56,7 @@ const Cliente = db.define(
         },
         slug: {
             type: DataTypes.STRING(255),
-            allowNull: false,
+            allowNull: true,
         },
         pasaporte: {
             type: DataTypes.BOOLEAN,
@@ -67,11 +68,11 @@ const Cliente = db.define(
         },
         sector: {
             type: DataTypes.STRING(100),
-            allowNull: false,
+            allowNull: true,
         },
         edad: {
             type: DataTypes.STRING(10),
-            allowNull: false,
+            allowNull: true,
         },
         contrasena: {
             type: DataTypes.STRING(45),
@@ -87,5 +88,19 @@ const Cliente = db.define(
         timestamps: false,
     }
 );
+
+Cliente.beforeCreate(async (cliente, options) => {
+    if (cliente.contrasena) {
+        const salt = await bcrypt.genSalt(12);
+        cliente.contrasena = await bcrypt.hash(cliente.contrasena, salt);
+    }
+});
+
+Cliente.beforeUpdate(async (cliente, options) => {
+    if (cliente.contrasena) {
+        const salt = await bcrypt.genSalt(12);
+        cliente.contrasena = await bcrypt.hash(cliente.contrasena, salt);
+    }
+});
 
 export default Cliente;

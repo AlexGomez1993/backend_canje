@@ -1,4 +1,4 @@
-import { Campania, Promocion, Tienda } from "../models/index.js";
+import { Campania, ConfigSaldo, Promocion, Tienda } from "../models/index.js";
 import { getFilters } from "../helpers/filtros.js";
 import { getPagination } from "../helpers/paginacion.js";
 
@@ -10,6 +10,11 @@ const listarCampania = async (req, res) => {
         let queryOptions = {
             where: filtros,
             order: [["id", "DESC"]],
+            include: [
+                { model: Promocion, as: "promociones" },
+                { model: ConfigSaldo, as: "configuracion" },
+            ],
+            distinct: true,
         };
 
         if (paginacion.limit) {
@@ -34,7 +39,10 @@ const listarCampania = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(404).json({ error: "Error al obtener las campañas" });
+        res.status(500).json({
+            error: "Error al obtener las campañas",
+            message: error.message,
+        });
     }
 };
 
@@ -66,7 +74,10 @@ const activarCampania = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al activar la campaña" });
+        res.status(500).json({
+            error: "Error al activar la campaña",
+            message: error.message,
+        });
     }
 };
 
@@ -80,14 +91,17 @@ const crearCampania = async (req, res) => {
             logo,
         });
 
-        return res.status(200).json({
+        return res.status(201).json({
             msg: `campaña creada correctamente`,
             campania: campania.nombre,
             id: campania.id,
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al crear la campaña" });
+        res.status(500).json({
+            error: "Error al crear la campaña",
+            message: error.message,
+        });
     }
 };
 
@@ -141,6 +155,7 @@ const agregarTiendas = async (req, res) => {
         console.error(error);
         res.status(500).json({
             error: "Error al actualizar las tiendas en la campaña",
+            message: error.message,
         });
     }
 };
@@ -150,7 +165,7 @@ const agregarPromociones = async (req, res) => {
         const { campaniaId, promocionesIds, eliminarPromocionesIds } = req.body;
 
         const campania = await Campania.findByPk(campaniaId, {
-            include: { model: Promocion, as: "Promociones" },
+            include: { model: Promocion, as: "promociones" },
         });
         if (!campania) {
             return res.status(404).json({ error: "Campaña no encontrada" });
@@ -201,6 +216,7 @@ const agregarPromociones = async (req, res) => {
         console.error(error);
         res.status(500).json({
             error: "Error al actualizar las promociones en la campaña",
+            message: error.message,
         });
     }
 };
@@ -229,7 +245,10 @@ const editarCampania = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al actualizar la campaña" });
+        res.status(500).json({
+            error: "Error al actualizar la campaña",
+            message: error.message,
+        });
     }
 };
 
@@ -238,7 +257,12 @@ const obtenerCampania = async (req, res) => {
         const { idCampania } = req.params;
 
         const campania = await Campania.findByPk(idCampania, {
-            include: [Tienda, Promocion],
+            include: [
+                { model: Tienda },
+                { model: Promocion, as: "promociones" },
+                { model: ConfigSaldo, as: "configuracion" },
+            ],
+            distinct: true,
         });
 
         if (!campania) {
@@ -250,7 +274,10 @@ const obtenerCampania = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al obtener la campaña" });
+        res.status(500).json({
+            error: "Error al obtener la campaña",
+            message: error.message,
+        });
     }
 };
 

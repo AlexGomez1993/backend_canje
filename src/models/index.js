@@ -20,7 +20,7 @@ Campania.belongsToMany(Promocion, {
     foreignKey: "campania_id",
     otherKey: "promocion_id",
     timestamps: false,
-    as: "Promociones",
+    as: "promociones",
 });
 
 Promocion.belongsToMany(Campania, {
@@ -28,7 +28,7 @@ Promocion.belongsToMany(Campania, {
     foreignKey: "promocion_id",
     otherKey: "campania_id",
     timestamps: false,
-    as: "Campanias",
+    as: "campanias",
 });
 
 Campania.belongsToMany(Tienda, {
@@ -65,13 +65,13 @@ Cliente.belongsTo(Ciudad, {
 });
 
 Cliente.hasMany(Factura, {
-    foreignKey: "cliente_id",
+    foreignKey: "ruc",
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
 });
 
 Factura.belongsTo(Cliente, {
-    foreignKey: "cliente_id",
+    foreignKey: "ruc",
     onDelete: "SET NULL",
     onUpdate: "CASCADE",
 });
@@ -80,7 +80,7 @@ ConfigSaldo.belongsTo(Campania, {
     foreignKey: "campania_id",
     onDelete: "SET NULL",
     onUpdate: "SET NULL",
-    as: "Campanias",
+    as: "campanias",
 });
 Cupon.belongsTo(Cliente, {
     foreignKey: "cliente_id",
@@ -110,6 +110,7 @@ Factura.belongsTo(Campania, {
     foreignKey: "campania_id",
     onDelete: "SET NULL",
     onUpdate: "SET NULL",
+    as: "campanias",
 });
 
 Factura.belongsTo(Tienda, {
@@ -148,6 +149,11 @@ SecuencialCampania.belongsTo(Campania, {
 Usuario.belongsTo(Rol, {
     foreignKey: "rol_id",
     as: "rol",
+});
+
+Campania.hasOne(ConfigSaldo, {
+    foreignKey: "campania_id",
+    as: "configuracion",
 });
 export {
     Tienda,

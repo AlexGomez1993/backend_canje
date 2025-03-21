@@ -13,7 +13,10 @@ const listarProvincias = async (req, res) => {
         return res.status(200).json(provincias);
     } catch (error) {
         console.error(error);
-        res.status(404).json({ error: "Error al obtener las provincias" });
+        res.status(500).json({
+            error: "Error al obtener las provincias",
+            message: error.message,
+        });
     }
 };
 

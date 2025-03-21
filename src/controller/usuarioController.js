@@ -42,7 +42,10 @@ const listarUsuarios = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(404).json({ error: "Error al obtener los usuarios" });
+        res.status(500).json({
+            error: "Error al obtener los usuarios",
+            message: error.message,
+        });
     }
 };
 
@@ -103,7 +106,10 @@ const crearUsuario = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al agregar el usuario" });
+        res.status(500).json({
+            error: "Error al agregar el usuario",
+            message: error.message,
+        });
     }
 };
 
@@ -146,7 +152,10 @@ const editarUsuario = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al actualizar el usuario" });
+        res.status(500).json({
+            error: "Error al actualizar el usuario",
+            message: error.message,
+        });
     }
 };
 

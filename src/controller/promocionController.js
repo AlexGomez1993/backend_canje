@@ -35,7 +35,10 @@ const listarPromocion = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(404).json({ error: "Error al obtener las promociones" });
+        res.status(500).json({
+            error: "Error al obtener las promociones",
+            message: error.message,
+        });
     }
 };
 
@@ -67,7 +70,10 @@ const activarPromocion = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al activar la promocion" });
+        res.status(500).json({
+            error: "Error al activar la promocion",
+            message: error.message,
+        });
     }
 };
 
@@ -84,14 +90,17 @@ const crearPromocion = async (req, res) => {
             fecha_fin,
         });
 
-        return res.status(200).json({
+        return res.status(201).json({
             msg: `promocion creada correctamente`,
             promocion: promocion.nombre,
             id: promocion.id,
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al crear la promocion" });
+        res.status(500).json({
+            error: "Error al crear la promocion",
+            message: error.message,
+        });
     }
 };
 
@@ -128,7 +137,10 @@ const editarPromocion = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al actualizar la promocion" });
+        res.status(500).json({
+            error: "Error al actualizar la promocion",
+            message: error.message,
+        });
     }
 };
 
@@ -146,7 +158,10 @@ const obtenerPromocion = async (req, res) => {
             promocion,
         });
     } catch (error) {
-        res.status(500).json({ error: "Error al obtener la promoción" });
+        res.status(500).json({
+            error: "Error al obtener la promoción",
+            message: error.message,
+        });
     }
 };
 

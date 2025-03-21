@@ -11,7 +11,10 @@ const listarFormaPago = async (req, res) => {
         return res.status(200).json(formasPago);
     } catch (error) {
         console.error(error);
-        res.status(404).json({ error: "Error al obtener las formasPago" });
+        res.status(500).json({
+            error: "Error al obtener las formasPago",
+            message: error.message,
+        });
     }
 };
 
@@ -32,7 +35,10 @@ const crearFormaPago = async (req, res) => {
         return res.status(201).json(nuevaFormaPago);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al agregar la forma de pago" });
+        res.status(500).json({
+            error: "Error al agregar la forma de pago",
+            message: error.message,
+        });
     }
 };
 
@@ -56,7 +62,10 @@ const editarFormaPago = async (req, res) => {
         return res.status(200).json(formaPago);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al editar la forma de pago" });
+        res.status(500).json({
+            error: "Error al editar la forma de pago",
+            message: error.message,
+        });
     }
 };
 
@@ -88,7 +97,10 @@ const activarFormaPago = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al activar la forma de pago" });
+        res.status(500).json({
+            error: "Error al activar la forma de pago",
+            message: error.message,
+        });
     }
 };
 

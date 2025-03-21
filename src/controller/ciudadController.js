@@ -34,7 +34,10 @@ const listarCiudades = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(404).json({ error: "Error al obtener las ciudades" });
+        res.status(500).json({
+            error: "Error al obtener las ciudades",
+            message: error.message,
+        });
     }
 };
 

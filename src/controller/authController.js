@@ -43,7 +43,9 @@ const login = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: "Error en el servidor" });
+        return res
+            .status(500)
+            .json({ error: "Error en el servidor", message: error.message });
     }
 };
 
@@ -86,7 +88,10 @@ const validarCliente = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al obtener al cliente" });
+        res.status(500).json({
+            error: "Error al obtener al cliente",
+            message: error.message,
+        });
     }
 };
 
@@ -131,7 +136,9 @@ const loginCliente = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: "Error en el servidor" });
+        return res
+            .status(500)
+            .json({ error: "Error en el servidor", message: error.message });
     }
 };
 
@@ -216,7 +223,10 @@ const crearClienteWeb = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al crear el cliente" });
+        res.status(500).json({
+            error: "Error al crear el cliente",
+            message: error.message,
+        });
     }
 };
 

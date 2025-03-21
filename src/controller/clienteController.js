@@ -55,7 +55,10 @@ const listarClientes = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(404).json({ error: "Error al obtener los clientes" });
+        res.status(500).json({
+            error: "Error al obtener los clientes",
+            message: error.message,
+        });
     }
 };
 
@@ -71,10 +74,9 @@ const obtenerCliente = async (req, res) => {
             const clienteExistente = await Cliente.findOne({
                 where: whereCondition,
             });
-
             if (clienteExistente) {
-                return res.status(400).json({
-                    msg: "El cliente con este RUC o pasaporte ya está registrado",
+                return res.status(200).json({
+                    clienteExistente,
                 });
             }
         }
@@ -82,13 +84,12 @@ const obtenerCliente = async (req, res) => {
         if (!clienteExistente) {
             return res.status(404).json({ msg: "Cliente no encontrado" });
         }
-
-        return res.status(200).json({
-            clienteExistente,
-        });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al obtener al cliente" });
+        res.status(500).json({
+            error: "Error al obtener al cliente",
+            message: error.message,
+        });
     }
 };
 
@@ -162,7 +163,10 @@ const crearClienteIsla = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al agregar el cliente" });
+        res.status(500).json({
+            error: "Error al agregar el cliente",
+            message: error.message,
+        });
     }
 };
 
@@ -209,7 +213,10 @@ const editarCliente = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al actualizar el cliente" });
+        res.status(500).json({
+            error: "Error al actualizar el cliente",
+            message: error.message,
+        });
     }
 };
 

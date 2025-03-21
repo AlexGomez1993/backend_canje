@@ -1,19 +1,52 @@
-import { Tienda } from "../models/index.js";
+import { Tienda, Campania } from "../models/index.js";
+import { getFilters } from "../helpers/filtros.js";
+import { getPagination } from "../helpers/paginacion.js";
 
 const listarTiendas = async (req, res) => {
     try {
-        const tiendas = await Tienda.findAll({
-            order: [["nombre", "ASC"]],
-        });
+        const filtros = getFilters(req.query);
+        const paginacion = getPagination(req.query);
 
-        if (tiendas.length === 0) {
+        let queryOptions = {
+            where: filtros,
+            distinct: true,
+        };
+
+        if (req.query.campania_id) {
+            queryOptions.include = {
+                model: Campania,
+                where: {
+                    id: req.query.campania_id,
+                },
+                through: { attributes: [] },
+            };
+        }
+        if (paginacion.limit) {
+            queryOptions.limit = paginacion.limit;
+            queryOptions.offset = paginacion.offset;
+        }
+        const { count, rows } = await Tienda.findAndCountAll(queryOptions);
+
+        if (count === 0) {
             const error = new Error("No tienes tiendas registradas");
             return res.status(404).json({ msg: error.message });
         }
-        return res.status(200).json(tiendas);
+
+        return res.status(200).json({
+            total: count,
+            pagina: paginacion.page,
+            limit: paginacion.limit,
+            totalPaginas: paginacion.limit
+                ? Math.ceil(count / paginacion.limit)
+                : 1,
+            data: rows,
+        });
     } catch (error) {
         console.error(error);
-        res.status(404).json({ error: "Error al obtener las tiendas" });
+        res.status(500).json({
+            error: "Error al obtener las tiendas",
+            message: error.message,
+        });
     }
 };
 
@@ -45,7 +78,10 @@ const activarTienda = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al activar la tienda" });
+        res.status(500).json({
+            error: "Error al activar la tienda",
+            message: error.message,
+        });
     }
 };
 
@@ -59,14 +95,17 @@ const crearTienda = async (req, res) => {
             numcupones,
         });
 
-        return res.status(200).json({
+        return res.status(201).json({
             msg: `tienda creada correctamente`,
             tienda: tienda.nombre,
             id: tienda.id,
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al crear la tienda" });
+        res.status(500).json({
+            error: "Error al crear la tienda",
+            message: error.message,
+        });
     }
 };
 
@@ -94,7 +133,10 @@ const editarTienda = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al actualizar la tienda" });
+        res.status(500).json({
+            error: "Error al actualizar la tienda",
+            message: error.message,
+        });
     }
 };
 
@@ -112,8 +154,17 @@ const obtenerTienda = async (req, res) => {
             tienda,
         });
     } catch (error) {
-        res.status(500).json({ error: "Error al obtener la tienda" });
+        res.status(500).json({
+            error: "Error al obtener la tienda",
+            message: error.message,
+        });
     }
 };
 
-export { listarTiendas, activarTienda, crearTienda, editarTienda, obtenerTienda };
+export {
+    listarTiendas,
+    activarTienda,
+    crearTienda,
+    editarTienda,
+    obtenerTienda,
+};

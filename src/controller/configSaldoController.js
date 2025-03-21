@@ -8,7 +8,7 @@ const listarConfigSaldo = async (req, res) => {
             include: [
                 {
                     model: Campania,
-                    as: "Campanias",
+                    as: "campanias",
                 },
             ],
         });
@@ -22,8 +22,9 @@ const listarConfigSaldo = async (req, res) => {
         return res.status(200).json(configSaldos);
     } catch (error) {
         console.error(error);
-        res.status(404).json({
+        res.status(500).json({
             error: "Error al obtener los saldos configurados",
+            message: error.message,
         });
     }
 };
@@ -47,14 +48,17 @@ const crearConfigSaldo = async (req, res) => {
             return res.status(404).json({ msg: error.message });
         }
 
-        return res.status(200).json({
+        return res.status(201).json({
             msg: `saldo de la campaña configurada correctamente`,
             campania: configSaldo.nombre,
             id: configSaldo.id,
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Error al crear la variable" });
+        res.status(500).json({
+            error: "Error al crear la variable",
+            message: error.message,
+        });
     }
 };
 
@@ -84,6 +88,7 @@ const editarConfigSaldo = async (req, res) => {
         console.error(error);
         res.status(500).json({
             error: "Error al actualizar el saldo configurado",
+            message: error.message,
         });
     }
 };

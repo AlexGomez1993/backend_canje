@@ -73,6 +73,17 @@ const obtenerCliente = async (req, res) => {
         if (Object.keys(whereCondition).length > 0) {
             const clienteExistente = await Cliente.findOne({
                 where: whereCondition,
+                attributes: {
+                    exclude: [
+                        "contrasena",
+                        "salt",
+                        "saldo",
+                        "sector",
+                        "sexo",
+                        "slug",
+                        "edad",
+                    ],
+                },
             });
             if (clienteExistente) {
                 return res.status(200).json({

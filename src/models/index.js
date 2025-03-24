@@ -65,13 +65,13 @@ Cliente.belongsTo(Ciudad, {
 });
 
 Cliente.hasMany(Factura, {
-    foreignKey: "ruc",
+    foreignKey: "cliente_id",
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
 });
 
 Factura.belongsTo(Cliente, {
-    foreignKey: "ruc",
+    foreignKey: "cliente_id",
     onDelete: "SET NULL",
     onUpdate: "CASCADE",
 });

@@ -49,11 +49,11 @@ const Factura = db.define(
             type: DataTypes.STRING(13),
             allowNull: true,
         },
-        imagen: {
-            type: DataTypes.STRING(200),
+        cliente_id: {
+            type: DataTypes.INTEGER,
             allowNull: true,
         },
-        img_valor: {
+        imagen: {
             type: DataTypes.STRING(200),
             allowNull: true,
         },

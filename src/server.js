@@ -18,6 +18,8 @@ import variableRouter from "./routes/variableRoutes.js";
 import configSaldoRouter from "./routes/configSaldo.js";
 import clienteRouter from "./routes/clienteRoutes.js";
 import validarRouter from "./routes/validarRoutes.js";
+import facturasRouter from "./routes/facturasRoutes.js";
+import saldosClienteRouter from "./routes/saldoRoutes.js";
 
 const app = express();
 
@@ -52,6 +54,8 @@ app.use("/api/promociones", autenticarJWT, promocionRouter);
 app.use("/api/variables", autenticarJWT, variableRouter);
 app.use("/api/configSaldos", autenticarJWT, configSaldoRouter);
 app.use("/api/clientes", autenticarJWT, clienteRouter);
+app.use("/api/facturas", autenticarJWT, facturasRouter);
+app.use("/api/saldosCliente", autenticarJWT, saldosClienteRouter);
 
 const PORT = process.env.BD_PORT || 3000;
 app.listen(PORT, () => {

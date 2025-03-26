@@ -502,10 +502,39 @@ const procesarFacturaWeb = async (req, res) => {
     }
 };
 
+const validarFactura = async (req, res) => {
+    try {
+        const { numeroFactura, tienda_id } = req.body;
+
+        const facturaEncontrada = await Factura.findOne({
+            where: {
+                tienda_id,
+                numero: numeroFactura,
+            },
+        });
+        if (facturaEncontrada) {
+            return res.status(200).json({
+                msg: "Factura encontrada",
+                id: facturaEncontrada.id,
+            });
+        }
+        return res.status(404).json({
+            msg: "Factura no encontrada",
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            error: "Error al procesar las facturas",
+            message: error.message,
+        });
+    }
+};
+
 export {
     listarFacturas,
     ingresarFacturasIsla,
     ingresarFacturasWeb,
     rechazarFacturaWeb,
     procesarFacturaWeb,
+    validarFactura,
 };

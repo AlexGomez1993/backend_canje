@@ -20,6 +20,7 @@ import clienteRouter from "./routes/clienteRoutes.js";
 import validarRouter from "./routes/validarRoutes.js";
 import facturasRouter from "./routes/facturasRoutes.js";
 import saldosClienteRouter from "./routes/saldoRoutes.js";
+import uploadRouter from "./routes/uploadRoutes.js";
 
 const app = express();
 
@@ -56,6 +57,7 @@ app.use("/api/configSaldos", autenticarJWT, configSaldoRouter);
 app.use("/api/clientes", autenticarJWT, clienteRouter);
 app.use("/api/facturas", autenticarJWT, facturasRouter);
 app.use("/api/saldosCliente", autenticarJWT, saldosClienteRouter);
+app.use("/api/upload", autenticarJWT, uploadRouter);
 
 const PORT = process.env.BD_PORT || 3000;
 app.listen(PORT, () => {

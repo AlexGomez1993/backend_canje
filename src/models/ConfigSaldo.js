@@ -4,9 +4,14 @@ import db from "../config/db.js";
 const ConfigSaldo = db.define(
     "configsaldo",
     {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+          },
         campania_id: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },
         descripcion: {
             type: DataTypes.STRING(255),
@@ -35,5 +40,6 @@ const ConfigSaldo = db.define(
         timestamps: false,
     }
 );
+
 
 export default ConfigSaldo;

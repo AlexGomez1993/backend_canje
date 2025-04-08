@@ -26,11 +26,6 @@ const listarUsuarios = async (req, res) => {
 
         const { count, rows } = await Usuario.findAndCountAll(queryOptions);
 
-        if (count === 0) {
-            const error = new Error("No tienes usuarios registrados");
-            return res.status(404).json({ msg: error.message });
-        }
-
         return res.status(200).json({
             total: count,
             pagina: paginacion.page,

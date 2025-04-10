@@ -15,7 +15,6 @@ const login = async (req, res) => {
                     "fecha_alta",
                     "activo",
                     "telefono",
-                    "celular",
                 ],
             },
         });

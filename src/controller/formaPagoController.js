@@ -1,18 +1,37 @@
 import { Formapago } from "../models/index.js";
+import { getFilters } from "../helpers/filtros.js";
+import { getPagination } from "../helpers/paginacion.js";
 
 const listarFormaPago = async (req, res) => {
     try {
-        const formasPago = await Formapago.findAll({});
+        const filtros = getFilters(req.query);
+        const paginacion = getPagination(req.query);
 
-        if (formasPago.length === 0) {
-            const error = new Error("No tienes formasPago registradas");
-            return res.status(404).json({ msg: error.message });
+        let queryOptions = {
+            where: filtros,
+            order: [["activo", "DESC"]],
+        };
+
+        if (paginacion.limit) {
+            queryOptions.limit = paginacion.limit;
+            queryOptions.offset = paginacion.offset;
         }
-        return res.status(200).json(formasPago);
+
+        const { count, rows } = await Formapago.findAndCountAll(queryOptions);
+
+        return res.status(200).json({
+            total: count,
+            pagina: paginacion.page,
+            limit: paginacion.limit,
+            totalPaginas: paginacion.limit
+                ? Math.ceil(count / paginacion.limit)
+                : 1,
+            data: rows,
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({
-            error: "Error al obtener las formasPago",
+            error: "Error al obtener las formas de pago",
             message: error.message,
         });
     }
@@ -104,4 +123,31 @@ const activarFormaPago = async (req, res) => {
     }
 };
 
-export { listarFormaPago, crearFormaPago, editarFormaPago, activarFormaPago };
+const obtenerFormaPago = async (req, res) => {
+    try {
+        const { idFormaPago } = req.params;
+
+        const formaPago = await Formapago.findByPk(idFormaPago);
+
+        if (!formaPago) {
+            return res.status(404).json({ msg: "Forma de pago no encontrada" });
+        }
+
+        return res.status(200).json({
+            formaPago,
+        });
+    } catch (error) {
+        res.status(500).json({
+            error: "Error al obtener la forma de pago",
+            message: error.message,
+        });
+    }
+};
+
+export {
+    listarFormaPago,
+    crearFormaPago,
+    editarFormaPago,
+    activarFormaPago,
+    obtenerFormaPago,
+};

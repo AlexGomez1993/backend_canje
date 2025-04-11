@@ -45,8 +45,8 @@ app.use(
 app.use("/api/auth", authRouter);
 app.use("/api/validacion", validarRouter);
 app.use("/api/tiendas", autenticarJWT, tiendasRouter);
-app.use("/api/provincias", autenticarJWT, provinciaRouter);
-app.use("/api/ciudades", autenticarJWT, ciudadRouter);
+app.use("/api/provincias", provinciaRouter);
+app.use("/api/ciudades", ciudadRouter);
 app.use("/api/noticias", autenticarJWT, noticiaRouter);
 app.use("/api/formasPago", autenticarJWT, formaPagoRouter);
 app.use("/api/usuarios", autenticarJWT, usuarioRouter);

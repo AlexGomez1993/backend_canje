@@ -10,7 +10,7 @@ const authRouter = express.Router();
 
 authRouter.post("/login", login);
 authRouter.post("/loginCliente", loginCliente);
-authRouter.get("/validarCliente", validarCliente);
+authRouter.post("/validarCliente", validarCliente);
 authRouter.post("/ingresarClienteWeb", crearClienteWeb);
 
 export default authRouter;

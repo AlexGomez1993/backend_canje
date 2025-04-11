@@ -131,7 +131,7 @@ const loginCliente = async (req, res) => {
             token,
             loginStatus: "success",
             message: "Login exitoso",
-            cliente,
+            user: cliente,
         });
     } catch (error) {
         console.error(error);

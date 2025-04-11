@@ -4,30 +4,15 @@ import { Ciudad, Provincia } from "../models/index.js";
 
 const listarCiudades = async (req, res) => {
     try {
-        const filtros = getFilters(req.query);
-        const paginacion = getPagination(req.query);
-
-        let queryOptions = {
-            where: filtros,
+        const ciudades = await Ciudad.findAll({
             order: [["nombre", "ASC"]],
-        };
-
-        if (paginacion.limit) {
-            queryOptions.limit = paginacion.limit;
-            queryOptions.offset = paginacion.offset;
-        }
-
-        const { count, rows } = await Ciudad.findAndCountAll(queryOptions);
-
-        return res.status(200).json({
-            total: count,
-            pagina: paginacion.page,
-            limit: paginacion.limit,
-            totalPaginas: paginacion.limit
-                ? Math.ceil(count / paginacion.limit)
-                : 1,
-            data: rows,
         });
+
+        if (ciudades.length === 0) {
+            const error = new Error("No tienes ciudades registradas");
+            return res.status(404).json({ msg: error.message });
+        }
+        return res.status(200).json(ciudades);
     } catch (error) {
         console.error(error);
         res.status(500).json({

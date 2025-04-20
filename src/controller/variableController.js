@@ -1,20 +1,40 @@
 import { Variable, SecuencialCampania } from "../models/index.js";
 import moment from "moment";
+import { getFilters } from "../helpers/filtros.js";
+import { getPagination } from "../helpers/paginacion.js";
 
 const listarVariables = async (req, res) => {
     try {
-        const variables = await Variable.findAll({
-            order: [["id", "DESC"]],
-        });
+        const filtros = getFilters(req.query);
+        const paginacion = getPagination(req.query);
 
-        if (variables.length === 0) {
-            const error = new Error("No tienes variables registradas");
-            return res.status(404).json({ msg: error.message });
+        let queryOptions = {
+            where: filtros,
+            order: [["id", "DESC"]],
+        };
+
+        if (paginacion.limit) {
+            queryOptions.limit = paginacion.limit;
+            queryOptions.offset = paginacion.offset;
         }
-        return res.status(200).json(variables);
+
+        const { count, rows } = await Variable.findAndCountAll(queryOptions);
+
+        return res.status(200).json({
+            total: count,
+            pagina: paginacion.page,
+            limit: paginacion.limit,
+            totalPaginas: paginacion.limit
+                ? Math.ceil(count / paginacion.limit)
+                : 1,
+            data: rows,
+        });
     } catch (error) {
         console.error(error);
-        res.status(404).json({ error: "Error al obtener las campañas" });
+        res.status(500).json({
+            error: "Error al obtener las variables",
+            message: error.message,
+        });
     }
 };
 

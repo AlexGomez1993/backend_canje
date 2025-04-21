@@ -3,6 +3,6 @@ import { listarSaldosCliente } from "../controller/saldosController.js";
 
 const saldosClienteRouter = express.Router();
 
-saldosClienteRouter.get("/", listarSaldosCliente);
+saldosClienteRouter.post("/", listarSaldosCliente);
 
 export default saldosClienteRouter;

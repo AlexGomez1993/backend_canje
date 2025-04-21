@@ -100,6 +100,17 @@ Cupon.belongsTo(Formapago, {
     onUpdate: "SET NULL",
 });
 
+Cupon.belongsTo(Factura, {
+    foreignKey: "factura_id",
+    onDelete: "SET NULL",
+    onUpdate: "SET NULL",
+});
+
+Factura.hasMany(Cupon, {
+    foreignKey: "factura_id",
+    as: "cupones",
+});
+
 Factura.belongsTo(Formapago, {
     foreignKey: "formapago_id",
     onDelete: "SET NULL",

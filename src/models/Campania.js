@@ -25,6 +25,10 @@ const Campania = db.define(
             type: DataTypes.STRING(100),
             allowNull: true,
         },
+        banner: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+        },
     },
     {
         tableName: "campania",

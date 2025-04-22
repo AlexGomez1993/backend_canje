@@ -1,7 +1,7 @@
 import { Op } from "sequelize";
 
 export const getFilters = (query) => {
-    const { search, activo, ruc, estadoFactura } = query;
+    const { search, activo, ruc, estadoFactura, cliente_id } = query;
     const whereCondition = {};
 
     if (search) {
@@ -13,7 +13,11 @@ export const getFilters = (query) => {
     }
 
     if (ruc) {
-        whereCondition.ruc = ruc;
+        whereCondition.ruc = { [Op.like]: `%${ruc}%` };
+    }
+
+    if (cliente_id) {
+        whereCondition.cliente_id = cliente_id;
     }
 
     if (estadoFactura) {

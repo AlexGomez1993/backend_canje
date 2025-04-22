@@ -46,6 +46,13 @@ const listarFacturas = async (req, res) => {
                         ],
                     },
                 },
+                {
+                    model: Cupon,
+                    as: "cupones",
+                    attributes: {
+                        exclude: ["id", "valorcompra"],
+                    },
+                },
             ],
             order: [["fechaRegistro", "ASC"]],
         };
@@ -170,14 +177,14 @@ const ingresarFacturasIsla = async (req, res) => {
                                     saldo: promocion.nuevoSaldo,
                                 });
                             } else {
-                                await Saldo.create({
+                                const nuevoSaldo = await Saldo.create({
                                     cliente_id: facturasCliente.cliente_id,
                                     campania_id: campania.id,
                                     promocion_id: promocion.id,
                                     saldo: promocion.nuevoSaldo,
                                 });
 
-                                if (!saldoCliente) {
+                                if (!nuevoSaldo) {
                                     throw new Error(
                                         "No se pudo crear el saldo para el cliente"
                                     );

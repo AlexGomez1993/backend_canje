@@ -1,9 +1,15 @@
 import { Campania, ConfigSaldo } from "../models/index.js";
 import moment from "moment";
+import { getFilters } from "../helpers/filtros.js";
+import { getPagination } from "../helpers/paginacion.js";
 
 const listarConfigSaldo = async (req, res) => {
     try {
-        const configSaldos = await ConfigSaldo.findAll({
+        const filtros = getFilters(req.query);
+        const paginacion = getPagination(req.query);
+
+        let queryOptions = {
+            where: filtros,
             order: [["id", "DESC"]],
             include: [
                 {
@@ -11,15 +17,24 @@ const listarConfigSaldo = async (req, res) => {
                     as: "campanias",
                 },
             ],
-        });
+        };
 
-        if (configSaldos.length === 0) {
-            const error = new Error(
-                "No tienes saldos configurados registradas"
-            );
-            return res.status(404).json({ msg: error.message });
+        if (paginacion.limit) {
+            queryOptions.limit = paginacion.limit;
+            queryOptions.offset = paginacion.offset;
         }
-        return res.status(200).json(configSaldos);
+
+        const { count, rows } = await ConfigSaldo.findAndCountAll(queryOptions);
+
+        return res.status(200).json({
+            total: count,
+            pagina: paginacion.page,
+            limit: paginacion.limit,
+            totalPaginas: paginacion.limit
+                ? Math.ceil(count / paginacion.limit)
+                : 1,
+            data: rows,
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({

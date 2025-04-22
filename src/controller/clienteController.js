@@ -128,13 +128,12 @@ const crearClienteIsla = async (req, res) => {
             !ciudad_id ||
             !provincia_id ||
             !sexo ||
-            !edad 
+            !edad
         ) {
             return res
                 .status(400)
                 .json({ msg: "Todos los campos son obligatorios" });
         }
-        
 
         const whereCondition = {};
         if (ruc) whereCondition.ruc = ruc;
@@ -163,8 +162,8 @@ const crearClienteIsla = async (req, res) => {
             ciudad_id,
             provincia_id,
             sexo,
-            slug:0,
-            sector:'Quito',
+            slug: 0,
+            sector: "Quito",
             edad,
             estado: 1,
         });
@@ -232,4 +231,35 @@ const editarCliente = async (req, res) => {
     }
 };
 
-export { listarClientes, obtenerCliente, crearClienteIsla, editarCliente };
+const cambiarContrasena = async (req, res) => {
+    try {
+        const { cliente_id, nuevaContrasena } = req.body;
+
+        const clienteExistente = await Cliente.findByPk(cliente_id);
+
+        if (!clienteExistente) {
+            return res.status(404).json({ msg: "Cliente no encontrado" });
+        }
+        clienteExistente.contrasena =
+            nuevaContrasena || clienteExistente.contrasena;
+
+        await clienteExistente.save();
+
+        return res.status(200).json({
+            msg: `Contraseña actualizada correctamente`,
+            cliente: clienteExistente.nombre,
+            id: clienteExistente.id,
+        });
+    } catch (error) {
+        console.error("Error al cambiar la contraseña del cliente:", error);
+        return res.status(500).json({ msg: "Error al procesar la solicitud" });
+    }
+};
+
+export {
+    listarClientes,
+    obtenerCliente,
+    crearClienteIsla,
+    editarCliente,
+    cambiarContrasena,
+};

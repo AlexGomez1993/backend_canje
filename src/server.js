@@ -24,7 +24,8 @@ import uploadRouter from "./routes/uploadRoutes.js";
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.static("./public"));
 
 //conexion BDD
@@ -38,7 +39,7 @@ try {
 
 app.use(
     cors({
-        origin: "*",
+        origin: 'http://localhost:3000', credentials: true 
     })
 );
 
@@ -59,7 +60,7 @@ app.use("/api/facturas", autenticarJWT, facturasRouter);
 app.use("/api/saldosCliente", autenticarJWT, saldosClienteRouter);
 app.use("/api/upload", autenticarJWT, uploadRouter);
 
-const PORT = process.env.BD_PORT || 3000;
+const PORT = process.env.BD_PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`);
 });

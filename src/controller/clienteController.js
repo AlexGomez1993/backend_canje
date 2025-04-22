@@ -113,6 +113,7 @@ const crearClienteIsla = async (req, res) => {
             ciudad_id,
             provincia_id,
             sexo,
+            edad,
             pasaporte,
         } = req.body;
 
@@ -126,12 +127,14 @@ const crearClienteIsla = async (req, res) => {
             !celular ||
             !ciudad_id ||
             !provincia_id ||
-            !sexo
+            !sexo ||
+            !edad 
         ) {
             return res
                 .status(400)
                 .json({ msg: "Todos los campos son obligatorios" });
         }
+        
 
         const whereCondition = {};
         if (ruc) whereCondition.ruc = ruc;
@@ -160,6 +163,9 @@ const crearClienteIsla = async (req, res) => {
             ciudad_id,
             provincia_id,
             sexo,
+            slug:0,
+            sector:'Quito',
+            edad,
             estado: 1,
         });
 

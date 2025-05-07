@@ -13,6 +13,7 @@ const listarCampania = async (req, res) => {
             include: [
                 { model: Promocion, as: "promociones" },
                 { model: ConfigSaldo, as: "configuracion" },
+                { model: Tienda, as: "tiendas" },
             ],
             distinct: true,
         };

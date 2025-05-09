@@ -82,11 +82,20 @@ const Cliente = db.define(
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        codigoTemporal: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        codigoExpiracion: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        },
     },
     {
         tableName: "cliente",
         timestamps: false,
-    }
+    },
+    
 );
 
 Cliente.beforeCreate(async (cliente, options) => {

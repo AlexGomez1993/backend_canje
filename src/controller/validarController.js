@@ -118,7 +118,6 @@ const cambiarContrasena = async (req, res) => {
         }
 
         const ahora = new Date();
-        console.log('clienteExistente.codigoExpiracion, ahora', clienteExistente.codigoExpiracion, ahora)
         if (clienteExistente.codigoTemporal !== codigo ||
             !clienteExistente.codigoExpiracion ||
             ahora > clienteExistente.codigoExpiracion) {

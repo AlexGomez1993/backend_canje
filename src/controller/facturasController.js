@@ -334,7 +334,7 @@ const rechazarFacturaWeb = async (req, res) => {
             usuario_id: usuario_id,
         });
 
-        const contenido = `
+/*         const contenido = `
 		
 					<p style="text-align:center;">
 					    <h3 style="text-align:center;">SISTEMA DE CANJES SCALA SHOPPING</h3>
@@ -363,8 +363,8 @@ const rechazarFacturaWeb = async (req, res) => {
 						Este correo ha sido generado autom&aacute;ticamente, favor no responder al mismo.<br>
 						Gracias por su atenci&oacute;n!
 					</p>
-				`;
-        const transporter = nodemailer.createTransport({
+				`; */
+/*         const transporter = nodemailer.createTransport({
             host: "mail.plazapomasqui.com",
             port: 465,
             secure: true,
@@ -381,7 +381,7 @@ const rechazarFacturaWeb = async (req, res) => {
             html: contenido,
         };
 
-        await transporter.sendMail(mailOptions);
+        await transporter.sendMail(mailOptions); */
 
         res.status(200).json({
             msg: "Factura rechazada correctamente.",

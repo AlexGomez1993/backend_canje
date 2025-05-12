@@ -9,11 +9,36 @@ import {
     SecuencialCampania,
     ConfigSaldo,
     Cliente,
+    Formapago,
 } from "../models/index.js";
 import { getFilters } from "../helpers/filtros.js";
 import { getPagination } from "../helpers/paginacion.js";
 import moment from "moment";
-import nodemailer from "nodemailer";
+
+const campaniaInclude = {
+    model: Campania,
+    as: "campanias",
+    attributes: {
+        exclude: ["activo", "slug", "descripcion"],
+    },
+    include: [
+        {
+            model: Promocion,
+            as: "promociones",
+            attributes: {
+                exclude: ["activo", "descripcion"],
+            },
+        },
+        {
+            model: ConfigSaldo,
+            as: "configuracion",
+            attributes: {
+                exclude: ["activo", "user", "fecha"],
+            },
+        },
+    ],
+    where: {},
+};
 
 const listarFacturas = async (req, res) => {
     try {
@@ -53,37 +78,26 @@ const listarFacturas = async (req, res) => {
                         exclude: ["id", "valorcompra"],
                     },
                 },
+                {
+                    model: Formapago,
+                    attributes: {
+                        exclude: ["slug","descripcion","factor"],
+                    },
+                },
             ],
             order: [["fechaRegistro", "ASC"]],
         };
-        if (req.query.campania_id) {
-            queryOptions.include.push({
-                model: Campania,
-                as: "campanias",
-                where: {
-                    id: req.query.campania_id,
-                },
-                attributes: {
-                    exclude: ["activo", "slug", "descripcion", "logo"],
-                },
-                include: [
-                    {
-                        model: Promocion,
-                        as: "promociones",
-                        attributes: {
-                            exclude: ["activo", "descripcion"],
-                        },
-                    },
-                    {
-                        model: ConfigSaldo,
-                        as: "configuracion",
-                        attributes: {
-                            exclude: ["activo", "user", "fecha"],
-                        },
-                    },
-                ],
-            });
-        }
+            if (req.query.campania_id) {
+                campaniaInclude.where.id = req.query.campania_id;
+            }
+            
+            if (req.query.campanias_activas !== undefined) {
+                campaniaInclude.where.activo = req.query.campanias_activas === "true";
+            }
+            
+            if (Object.keys(campaniaInclude.where).length > 0) {
+                queryOptions.include.push(campaniaInclude);
+            }
         if (paginacion.limit) {
             queryOptions.limit = paginacion.limit;
             queryOptions.offset = paginacion.offset;
@@ -222,7 +236,7 @@ const ingresarFacturasIsla = async (req, res) => {
                 });
 
                 cuponesImprimir.push({
-                    campania: campania.nombre,
+                    campania: campania.nombre,               
                     ultimoCuponImpreso: cuponesActual,
                     ultimoCuponImprimir: totalCuponesActualizado,
                 });

@@ -81,7 +81,7 @@ const listarFacturas = async (req, res) => {
                 {
                     model: Formapago,
                     attributes: {
-                        exclude: ["slug","descripcion","factor"],
+                        exclude: ["slug","descripcion"],
                     },
                 },
             ],

@@ -22,48 +22,52 @@ const validarMail = async (req, res) => {
             return res.status(404).json({ msg: "Cliente no encontrado" });
         }
         const codigo = Math.floor(100000 + Math.random() * 900000).toString();
-        const expiracion = new Date(Date.now() + 1 * 60 * 1000);
+        const expiracion = new Date(Date.now() + 10 * 60 * 1000);
 
         clienteExistente.codigoTemporal = codigo;
         clienteExistente.codigoExpiracion = expiracion;
         await clienteExistente.save();
         const contenido = `
-            <table style="width:100%; max-width:600px; margin:auto; font-family:Arial, sans-serif; border:1px solid #e0e0e0; border-collapse:collapse; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
-            <tr style="background-color:#821a3b; color:white;">
-                <td style="padding:20px; text-align:left; vertical-align:middle;">
-                <img src="cid:logo" alt="Scala Logo" style="height:50px; margin-right:10px;" />
-                </td>
-                <td style="padding:20px; text-align:left; vertical-align:middle;">
-                <h2 style="margin:0;">Sistema de Canjes</h2>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" style="padding:20px; text-align:center;">
-                <p style="margin:0; font-size:16px;">
-                    <strong>Estimado(a): ${clienteExistente.nombre} ${clienteExistente.apellidos}</strong>
-                </p>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" style="padding:20px;">
-                <p style="font-size:15px; color:#333;">
-                    Por tu seguridad, no compartas esta información con NADIE. Para cambiar tu contraseña, tu código es:
-                </p>
-                <p style="font-size:24px; font-weight:bold; color:#821a3b; text-align:center; margin:20px 0;">
-                    ${codigo}
-                </p>
-                <p style="font-size:14px; color:#555;">
-                    * Copia este código y pégalo en el formulario de cambio de contraseña.
-                </p>
-                </td>
-            </tr>
-            <tr style="background-color:#f9f9f9;">
-                <td colspan="2" style="padding:20px; text-align:center; font-size:13px; color:#888;">
-                Este mensaje se ha generado automáticamente, favor no responder al mismo.
-                </td>
-            </tr>
-            </table>
-        `;
+    <table style="width:100%; max-width:600px; margin:auto; font-family:Arial, sans-serif; border:1px solid #e0e0e0; border-collapse:collapse; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+      <tr style="background-color:#821a3b; color:white;">
+        <td style="padding:20px; text-align:left; vertical-align:middle;">
+          <img src="cid:logo" alt="Scala Logo" style="height:50px; margin-right:10px;" />
+        </td>
+        <td style="padding:20px; text-align:left; vertical-align:middle;">
+          <h2 style="margin:0;">Sistema de Canjes</h2>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="padding:20px; text-align:center;">
+          <p style="margin:0; font-size:16px;">
+            <strong>Estimado(a): ${clienteExistente.nombre} ${clienteExistente.apellidos}</strong>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="padding:20px;">
+          <p style="font-size:15px; color:#333;">
+            Por tu seguridad, no compartas esta información con NADIE. Para cambiar tu contraseña, tu código es:
+          </p>
+          <p style="font-size:24px; font-weight:bold; color:#821a3b; text-align:center; margin:20px 0;">
+            ${codigo}
+          </p>
+          <p style="font-size:14px; color:#555;">
+            * Copia este código y pégalo en el formulario de cambio de contraseña.
+          </p>
+          <p style="font-size:14px; color:#555;">
+            <strong>Este código tiene una duración de 10 minutos.</strong>
+          </p>
+        </td>
+      </tr>
+      <tr style="background-color:#f9f9f9;">
+        <td colspan="2" style="padding:20px; text-align:center; font-size:13px; color:#888;">
+          Este mensaje se ha generado automáticamente, favor no responder al mismo.
+        </td>
+      </tr>
+    </table>
+`;
+
 
         const transporter = nodemailer.createTransport({
             host: "mail.plazapomasqui.com",

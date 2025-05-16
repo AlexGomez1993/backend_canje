@@ -99,6 +99,40 @@ const obtenerCliente = async (req, res) => {
     }
 };
 
+const obtenerClienteId = async (req, res) => {
+    try {
+        const { idCliente } = req.params;
+
+        const cliente = await Cliente.findByPk(idCliente,{
+            attributes: {
+                exclude: [
+                    "contrasena",
+                    "salt",
+                    "saldo",
+                    "sector",
+                    "sexo",
+                    "slug",
+                    "edad",
+                ],
+            },
+        })
+        if (cliente) {
+            return res.status(200).json({
+                clienteExistente,
+            });
+        }
+        if (!clienteExistente) {
+            return res.status(404).json({ msg: "Cliente no encontrado" });
+        }        
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            error: "Error al obtener al cliente",
+            message: error.message,
+        });
+    }
+};
+
 const crearClienteIsla = async (req, res) => {
     try {
         const {
@@ -262,4 +296,5 @@ export {
     crearClienteIsla,
     editarCliente,
     cambiarContrasena,
+    obtenerClienteId
 };

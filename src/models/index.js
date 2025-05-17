@@ -1,6 +1,6 @@
 import Tienda from "./Tienda.js";
 import Campania from "./Campania.js";
-import Promocion from "./promocion.js";
+import Promocion from "./Promocion.js";
 import Ciudad from "./Ciudad.js";
 import Cliente from "./Cliente.js";
 import ConfigSaldo from "./ConfigSaldo.js";

@@ -29,6 +29,10 @@ const Campania = db.define(
             type: DataTypes.TEXT,
             allowNull: true,
         },
+        reglamento: {
+            type: DataTypes.STRING(255),
+            allowNull: true,
+        }
     },
     {
         tableName: "campania",

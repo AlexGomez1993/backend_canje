@@ -26,7 +26,7 @@ const Campania = db.define(
             allowNull: true,
         },
         banner: {
-            type: DataTypes.TEXT,
+            type: DataTypes.STRING(255),
             allowNull: true,
         },
         reglamento: {

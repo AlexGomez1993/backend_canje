@@ -70,17 +70,17 @@ const validarMail = async (req, res) => {
 
 
         const transporter = nodemailer.createTransport({
-            host: "mail.plazapomasqui.com",
-            port: 465,
-            secure: true,
+            host: process.env.MAIL_HOST,
+            port: process.env.MAIL_PORT,
+            secure: process.env.MAIL_SECURE,
             auth: {
-                user: "scalacanjes@plazapomasqui.com",
-                pass: "tqom]@S#u3G1",
+                user: process.env.MAIL_USER,
+                pass: process.env.MAIL_PASSWORD,
             },
         });
 
         const mailOptions = {
-            from: "scalacanjes@plazapomasqui.com",
+            from: process.env.MAIL_USER,
             to: clienteExistente.email,
             subject: "Cambio de contraseña",
             html: contenido,
